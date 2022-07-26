@@ -42,7 +42,7 @@ private slots:
 
     void on_pushButton_21_clicked();
 
-
+     bool isInFavList(std::string);
 
 
     void on_pushButton_3_clicked();

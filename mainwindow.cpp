@@ -5,7 +5,7 @@
 mainpage::mainpage(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::mainpage)
-    , myDict(Dictionary("Viet-Anh", '\''))
+    , myDict(Dictionary("slang", '`'))
 {
 
     this->setFixedSize(800, 500);
@@ -197,7 +197,22 @@ void mainpage::on_datasetBtt_clicked()
 {
     ui->searchBar->clearFocus();
 }
+bool mainpage::isInFavList(std::string temp)
+{
+    std::ifstream fin;
+    fin.open("user_favlist.txt");
+    std::vector<std::string> favList;
+    std::string t;
+    while (std::getline(fin,t))
+    {
+        favList.push_back(t);
+    }
+    fin.close();
+    for (int i=0; i<favList.size(); ++i)
+        if (favList[i]==temp) return true;
+    return false;
 
+}
 void mainpage::on_recommendationBar_itemClicked(QListWidgetItem *item)
 {
     ui->stackedWidget->setCurrentWidget(ui->page);
@@ -205,6 +220,9 @@ void mainpage::on_recommendationBar_itemClicked(QListWidgetItem *item)
     ui->def_2->setText(QString::fromUtf8(myDict.search(item->text().toStdString())->def));
     //ui->word->setText(item->text());
     //ui->def->setText(QString::fromUtf8(myDict.search(item->text().toStdString())->def));
+    if (isInFavList(item->text().toStdString()))
+        ui->pushButton_16->setText("❤");
+    else ui->pushButton_16->setText("♡");
 }
 
 
@@ -216,11 +234,11 @@ void mainpage::on_quizBtt_clicked()
  std::vector<TreeNode*>result=myDict.getVector();
  int index=myDict.getIndex();
 
- ui->textBrowser_3->setText("what is the definition of \"" + QString::fromStdString(get_word(result[index])) + "\" ?");
- ui->pushButton->setText(QString::fromStdString(result[0]->def));
-  ui->pushButton_19->setText(QString::fromStdString(result[1]->def));
-   ui->pushButton_20->setText(QString::fromStdString(result[2]->def));
-    ui->pushButton_3->setText(QString::fromStdString(result[3]->def));
+ ui->textBrowser_3->setText("what is the definition of \"" + QString::fromUtf8(get_word(result[index])) + "\" ?");
+ ui->pushButton->setText(QString::fromUtf8(result[0]->def));
+  ui->pushButton_19->setText(QString::fromUtf8(result[1]->def));
+   ui->pushButton_20->setText(QString::fromUtf8(result[2]->def));
+    ui->pushButton_3->setText(QString::fromUtf8(result[3]->def));
 
 }
 
@@ -228,12 +246,12 @@ bool mainpage::isTrue(QString def)
 {
 
    if (word_or_def==0)
-    {if (def==QString::fromStdString(myDict.getVector()[myDict.getIndex()]->def))
-        return true;}
+    if (def==QString::fromUtf8(myDict.getVector()[myDict.getIndex()]->def))
+        return true;
    if (word_or_def==1)
-   {if (def==QString::fromStdString(get_word(myDict.getVector()[myDict.getIndex()])))
+   if (def==QString::fromUtf8(get_word(myDict.getVector()[myDict.getIndex()])))
            return true;
-   }
+
      return false;
 }
 
@@ -242,24 +260,28 @@ void mainpage::on_pushButton_clicked()
 {
    if (isTrue(ui->pushButton->text()))
        ui->textBrowser_3->setText("CORRECT!");
+  else
    ui->textBrowser_3->setText("WRONG!");
 }
 void mainpage::on_pushButton_19_clicked()
 {
    if (isTrue(ui->pushButton_19->text()))
        ui->textBrowser_3->setText("CORRECT!");
+   else
     ui->textBrowser_3->setText("WRONG!");
 }
 void mainpage::on_pushButton_20_clicked()
 {
    if (isTrue(ui->pushButton_20->text()))
        ui->textBrowser_3->setText("CORRECT!");
+   else
   ui->textBrowser_3->setText("WRONG!");
 }
 void mainpage::on_pushButton_3_clicked()
 {
    if (isTrue(ui->pushButton_3->text()))
        ui->textBrowser_3->setText("CORRECT!");
+   else
    ui->textBrowser_3->setText("WRONG!");
 }
 
@@ -271,20 +293,20 @@ void mainpage::on_pushButton_22_clicked()
     int index=myDict.getIndex();
     if (word_or_def==0)
     {
-        ui->textBrowser_3->setText("what is the definition of \"" + QString::fromStdString(get_word(result[index])) + "\" ?");
-        ui->pushButton->setText(QString::fromStdString(result[0]->def));
-         ui->pushButton_19->setText(QString::fromStdString(result[1]->def));
-          ui->pushButton_20->setText(QString::fromStdString(result[2]->def));
-           ui->pushButton_3->setText(QString::fromStdString(result[3]->def));
+        ui->textBrowser_3->setText("what is the definition of \"" + QString::fromUtf8(get_word(result[index])) + "\" ?");
+        ui->pushButton->setText(QString::fromUtf8(result[0]->def));
+         ui->pushButton_19->setText(QString::fromUtf8(result[1]->def));
+          ui->pushButton_20->setText(QString::fromUtf8(result[2]->def));
+           ui->pushButton_3->setText(QString::fromUtf8(result[3]->def));
     }
     else
     {
 
-        ui->textBrowser_3->setText("what is the word of \"" + QString::fromStdString(result[index]->def)+ "\" ?");
-        ui->pushButton->setText(QString::fromStdString(get_word(result[0])));
-         ui->pushButton_19->setText(QString::fromStdString(get_word(result[1])));
-          ui->pushButton_20->setText(QString::fromStdString(get_word(result[2])));
-           ui->pushButton_3->setText(QString::fromStdString(get_word(result[3])));
+        ui->textBrowser_3->setText("what is the word of \"" + QString::fromUtf8(result[index]->def)+ "\" ?");
+        ui->pushButton->setText(QString::fromUtf8(get_word(result[0])));
+         ui->pushButton_19->setText(QString::fromUtf8(get_word(result[1])));
+          ui->pushButton_20->setText(QString::fromUtf8(get_word(result[2])));
+           ui->pushButton_3->setText(QString::fromUtf8(get_word(result[3])));
     }
 }
 
@@ -297,45 +319,56 @@ void mainpage::on_pushButton_21_clicked()
     int index=myDict.getIndex();
     if (word_or_def==0)
     {
-        ui->textBrowser_3->setText("what is the definition of \"" + QString::fromStdString(get_word(result[index])) + "\" ?");
-        ui->pushButton->setText(QString::fromStdString(result[0]->def));
-         ui->pushButton_19->setText(QString::fromStdString(result[1]->def));
-          ui->pushButton_20->setText(QString::fromStdString(result[2]->def));
-           ui->pushButton_3->setText(QString::fromStdString(result[3]->def));
+        ui->textBrowser_3->setText("what is the definition of \"" + QString::fromUtf8(get_word(result[index])) + "\" ?");
+        ui->pushButton->setText(QString::fromUtf8(result[0]->def));
+         ui->pushButton_19->setText(QString::fromUtf8(result[1]->def));
+          ui->pushButton_20->setText(QString::fromUtf8(result[2]->def));
+           ui->pushButton_3->setText(QString::fromUtf8(result[3]->def));
     }
     else
     {
-        ui->textBrowser_3->setText("what is the word of \"" + QString::fromStdString(result[index]->def) + "\" ?");
-        ui->pushButton->setText(QString::fromStdString(get_word(result[0])));
-         ui->pushButton_19->setText(QString::fromStdString(get_word(result[1])));
-          ui->pushButton_20->setText(QString::fromStdString(get_word(result[2])));
-           ui->pushButton_3->setText(QString::fromStdString(get_word(result[3])));
+        ui->textBrowser_3->setText("what is the word of \"" + QString::fromUtf8(result[index]->def) + "\" ?");
+        ui->pushButton->setText(QString::fromUtf8(get_word(result[0])));
+         ui->pushButton_19->setText(QString::fromUtf8(get_word(result[1])));
+          ui->pushButton_20->setText(QString::fromUtf8(get_word(result[2])));
+           ui->pushButton_3->setText(QString::fromUtf8(get_word(result[3])));
     }
 }
 
 
 void mainpage::on_pushButton_16_clicked()
 {
-    actionOnFavList(ui->word_2->text().toStdString(),false);
+    if (ui->pushButton_16->text()=="❤")
+    {
+        actionOnFavList(ui->word_2->text().toStdString(),true);
+        ui->pushButton_16->setText("♡");
+    }
+    else
+    {
+        actionOnFavList(ui->word_2->text().toStdString(),false);
+        ui->pushButton_16->setText("❤");
+    }
+
 }
 
 
 void mainpage::on_pushButton_17_clicked()
 {
-     actionOnFavList(ui->word_2->text().toStdString(),true);
+
 }
 
 
 void mainpage::on_favlistBtt_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->page_3);
+    ui->listWidget->clear();
     std::ifstream fin;
     fin.open("user_favlist.txt");
     std::string t;
     int i=1;
     while (getline(fin,t))
     {
-        ui->listWidget->addItem(QString::number(i)+". "+ QString::fromStdString(t));
+        ui->listWidget->addItem(QString::number(i)+". "+ QString::fromUtf8(t));
            ++i;
     }
     fin.close();
