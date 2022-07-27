@@ -14,7 +14,6 @@
 #include <QListWidgetItem>
 #include <QMessageBox>
 #include <thread>
-#include <unistd.h>
 #include "dictionary.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -62,6 +61,8 @@ private slots:
     void on_pushButton_17_clicked();
 
     void on_favlistBtt_clicked();
+
+    void on_historyBtt_clicked();
 
 private:
     Ui::mainpage *ui;

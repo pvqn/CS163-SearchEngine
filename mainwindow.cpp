@@ -4,8 +4,8 @@
 
 mainpage::mainpage(QWidget *parent)
     : QMainWindow(parent)
+    , myDict(Dictionary("slang", '\t'))
     , ui(new Ui::mainpage)
-    , myDict(Dictionary("slang", '`'))
 {
 
     this->setFixedSize(800, 500);
@@ -372,5 +372,26 @@ void mainpage::on_favlistBtt_clicked()
            ++i;
     }
     fin.close();
+}
+
+
+void mainpage::on_historyBtt_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->page_4);
+    ui->listWidget_2->clear();
+
+    std::ifstream in("history.txt");
+
+    if (in)
+    {
+        std::string str;
+
+        size_t index = 1;
+
+        while (getline(in, str))
+        {
+            ui->listWidget_2->addItem(QString::number(index++) + "." + QString::fromUtf8(str.c_str()));
+        }
+    }
 }
 

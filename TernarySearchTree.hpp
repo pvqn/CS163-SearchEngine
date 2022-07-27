@@ -342,7 +342,7 @@ private:
         if ( index == prefix.size() - 1 && prefix[index] == pRoot->data) return pRoot;
         if (pRoot->data == prefix[index]) return address(pRoot->mid, prefix, index + 1);
         if (pRoot->data < prefix[index]) return address(pRoot->right, prefix, index);
-        if (pRoot->data > prefix[index]) return address(pRoot->left, prefix, index);
+        return address(pRoot->left, prefix, index);
     }
 
     void to_leaf(TreeNode* root, std::vector<std::string> &result, int &count )
