@@ -115,6 +115,21 @@ private:
         return nullptr;
     }
 
+     void eraseInListEOW(TreeNode *root)
+     {
+         bool check=false;
+         for (int i=0; i<words.size(); ++i)
+         {
+             if (words[i]==root)
+                 check=true;
+             if (check)
+             {
+                 words[i]=words[i+1];
+             }
+         }
+         words[words.size()-1] = root;
+         words.pop_back();
+     }
     /*quynh nhu*/
     int deleteNode(TreeNode*& root, size_t index, std::string s, std::vector<std::string>& keyword, TreeNode*& eow)
     {
@@ -126,6 +141,7 @@ private:
             {
                 keyword.clear();
                 keyword = util::str::split(root->def);
+                eraseInListEOW(root);
                 eow = root;
                 return (!root->left && !root->right && !root->mid);
             }
