@@ -118,7 +118,7 @@ private:
      void eraseInListEOW(TreeNode *root)
      {
          bool check=false;
-         for (int i=0; i<words.size(); ++i)
+         for (int i=0; i<words.size()-1; ++i)
          {
              if (words[i]==root)
                  check=true;
